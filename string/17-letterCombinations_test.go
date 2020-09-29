@@ -2,6 +2,7 @@ package main
 
 import (
 	"testing"
+	"github.com/soooldier/leetcode/utils"
 )
 
 var letters = map[string]string{
@@ -27,7 +28,7 @@ func TestLetterCombinations(t *testing.T) {
 	}
 	for _, tt := range cases {
 		actual := letterCombinationsA(tt.input)
-		if false == testEq(actual, tt.expected) {
+		if false == utils.TestStringSliceEq(actual, tt.expected) {
 			t.Errorf("letterCombinationsA(%s) = %v; expected %v", tt.input, actual, tt.expected)
 		}
 	}
@@ -51,20 +52,4 @@ func letterCombinationsA(digits string) []string {
 	}
 	dfs(0, "")
 	return ans
-}
-
-func testEq(a, b []string) bool {
-	// If one is nil, the other must also be nil.
-	if (a == nil) != (b == nil) {
-		return false
-	}
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
 }
