@@ -19,3 +19,11 @@ func TestStringSliceEq(a, b []string) bool {
 	}
 	return true
 }
+
+func AsciiHash(s string) int {
+	var i int
+	for _, v := range s {
+		i = i + int(v)
+	}
+	return i
+}
