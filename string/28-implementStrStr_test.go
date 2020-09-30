@@ -24,6 +24,10 @@ func TestImplementStrStr(t *testing.T) {
 		if actual1 != tt.expected {
 			t.Errorf("strStrHash(%#v, %#v) = %v; expected %v", tt.input1, tt.input2, actual1, tt.expected)
 		}
+		actual2 := strStrLoop(tt.input1, tt.input2)
+		if actual1 != tt.expected {
+			t.Errorf("strStrLoop(%#v, %#v) = %v; expected %v", tt.input1, tt.input2, actual2, tt.expected)
+		}
 	}
 }
 
@@ -51,6 +55,33 @@ func strStrHash(haystack string, needle string) int {
 		}
 		if hash1 == hash2 {
 			if needle == haystack[i:n2+i] {
+				return i
+			}
+		}
+	}
+	return -1
+}
+
+// 循环遍历比较
+func strStrLoop(haystack string, needle string) int {
+	n1 := len(haystack)
+	n2 := len(needle)
+	if n2 > n1 {
+		return -1
+	}
+	if n2 == 0 && n1 > 0 {
+		return 0
+	}
+	for i := 0; i < n1; i++ {
+		// 如果needle的字符串长度为3，而haystack字符串已经遍历到最后2个字符，不可能匹配，直接返回-1
+		if i >= n1-n2+1 {
+			return -1
+		}
+		for j := 0; j < n2; j++ {
+			if needle[j] != haystack[i+j] {
+				break
+			}
+			if j == n2-1 {
 				return i
 			}
 		}
