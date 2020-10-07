@@ -31,6 +31,10 @@ func restoreIpAddresses(s string) []string {
 	ans := []string{}
 	var dfs func(s string, index int, carry int)
 	dfs = func(s string, index int, carry int) {
+		if len(s[index:]) > (4-carry)*3 {
+			// 剩余字符太多，不可能拼接成功直接剪枝
+			return
+		}
 		if carry == 4 {
 			if index == len(s) {
 				// 已经找到4段并且字符串s已经用完
