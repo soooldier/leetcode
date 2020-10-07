@@ -27,3 +27,17 @@ func AsciiHash(s string) int {
 	}
 	return i
 }
+
+func IntMax(i, j int) int {
+	if i > j {
+		return i
+	}
+	return j
+}
+
+func IntMin(i, j int) int {
+	if i < j {
+		return i
+	}
+	return j
+}
