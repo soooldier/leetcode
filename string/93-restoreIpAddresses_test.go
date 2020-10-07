@@ -44,7 +44,6 @@ func restoreIpAddresses(s string) []string {
 				// 找到4段字符后还有剩余字符
 				return
 			}
-
 		}
 		if index == len(s) {
 			// 字符串s已经用完了但还没拼够4段字符
