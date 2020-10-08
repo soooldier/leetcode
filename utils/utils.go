@@ -20,6 +20,22 @@ func TestStringSliceEq(a, b []string) bool {
 	return true
 }
 
+func TestIntSliceEq(a, b []int) bool {
+	// If one is nil, the other must also be nil.
+	if (a == nil) != (b == nil) {
+		return false
+	}
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
 func AsciiHash(s string) int {
 	var i int
 	for _, v := range s {
