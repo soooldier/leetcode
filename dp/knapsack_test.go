@@ -25,16 +25,21 @@ func TestKnapsack(t *testing.T) {
 		input3   int
 		expected int // expescted result
 	}{
-		{[]int{0, 5, 5, 3, 4, 3}, []int{0, 40, 50, 20, 30, 35}, 10, 90},
+		{[]int{5, 5, 3, 4, 3}, []int{40, 50, 20, 30, 35}, 10, 90},
 	}
 	for _, tt := range cases {
 		actual := knapsackDp(tt.input1, tt.input2, tt.input3)
 		if actual != tt.expected {
 			t.Errorf("knapsackDp(%#v, %#v, %#v) = %v; expected %v", tt.input1, tt.input2, tt.input3, actual, tt.expected)
 		}
+		actual1 := knapsackDpPlus(tt.input1, tt.input2, tt.input3)
+		if actual1 != tt.expected {
+			t.Errorf("knapsackDpPlus(%#v, %#v, %#v) = %v; expected %v", tt.input1, tt.input2, tt.input3, actual1, tt.expected)
+		}
 	}
 }
 
+// 普通dp
 func knapsackDp(w, v []int, cap int) int {
 	size := len(w)
 	dp := make([][]int, size)
@@ -43,15 +48,51 @@ func knapsackDp(w, v []int, cap int) int {
 	}
 	for i := 0; i < size; i++ {
 		for j := 0; j <= cap; j++ {
-			if i == 0 || j == 0 {
+			if j == 0 {
 				dp[i][j] = 0
 			} else {
-				if j-w[i] < 0 {
-					continue
+				if i == 0 {
+					if w[i] <= j {
+						dp[i][j] = v[i]
+					} else {
+						dp[i][j] = 0
+					}
+				} else {
+					if j-w[i] < 0 {
+						dp[i][j] = dp[i-1][j]
+					} else {
+						dp[i][j] = utils.IntMax(dp[i-1][j], dp[i-1][j-w[i]]+v[i])
+					}
 				}
-				dp[i][j] = utils.IntMax(dp[i-1][j], dp[i-1][j-w[i]]+v[i])
 			}
 		}
 	}
 	return dp[size-1][cap]
+}
+
+// 压缩dp数组版本，空间复杂度更优
+func knapsackDpPlus(w, v []int, cap int) int {
+	// pre db table
+	pdp := make([]int, cap+1)
+	// 只放第一个物品
+	for i := 0; i <= cap; i++ {
+		if w[0] <= i {
+			pdp[i] = v[0]
+		} else {
+			pdp[i] = 0
+		}
+	}
+	var dp []int
+	for i := 1; i < len(w); i++ {
+		dp = make([]int, cap+1)
+		for j := 0; j <= cap; j++ {
+			if j-w[i] < 0 {
+				dp[j] = pdp[j]
+			} else {
+				dp[j] = utils.IntMax(pdp[j], pdp[j-w[i]]+v[i])
+			}
+		}
+		pdp = dp
+	}
+	return pdp[cap]
 }
