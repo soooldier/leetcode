@@ -36,6 +36,10 @@ func TestKnapsack(t *testing.T) {
 		if actual1 != tt.expected {
 			t.Errorf("knapsackDpPlus(%#v, %#v, %#v) = %v; expected %v", tt.input1, tt.input2, tt.input3, actual1, tt.expected)
 		}
+		actual2 := knapsackRecursive(tt.input1, tt.input2, tt.input3)
+		if actual2 != tt.expected {
+			t.Errorf("knapsackRecursive(%#v, %#v, %#v) = %v; expected %v", tt.input1, tt.input2, tt.input3, actual2, tt.expected)
+		}
 	}
 }
 
@@ -95,4 +99,25 @@ func knapsackDpPlus(w, v []int, cap int) int {
 		pdp = dp
 	}
 	return pdp[cap]
+}
+
+// 递归解法
+func knapsackRecursive(w, v []int, cap int) int {
+	var recursive func(int, int) int
+	recursive = func(i, c int) int {
+		if c == 0 {
+			return 0
+		}
+		if i == 1 {
+			if c < w[0] {
+				return 0
+			}
+			return v[0]
+		}
+		if c-w[i-1] < 0 {
+			return recursive(i-1, c)
+		}
+		return utils.IntMax(recursive(i-1, c), recursive(i-1, c-w[i-1])+v[i-1])
+	}
+	return recursive(len(w), cap)
 }
