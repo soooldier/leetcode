@@ -36,6 +36,15 @@ func TestIntSliceEq(a, b []int) bool {
 	return true
 }
 
+func TestInIntSlice(s []int, i int) bool {
+	for _, v := range s {
+		if v == i {
+			return true
+		}
+	}
+	return false
+}
+
 func AsciiHash(s string) int {
 	var i int
 	for _, v := range s {
